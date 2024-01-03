@@ -131,4 +131,13 @@ namespace Core3d {
 
         return tangents;
     }
+
+    std::vector<int> makeTriangleStarts(const int nTriangles)
+    {
+        std::vector<int> triangleStarts;
+        triangleStarts.reserve(nTriangles + 1);
+        for (int triangleInd = 0; triangleInd <= nTriangles; ++triangleInd)
+            triangleStarts.push_back(triangleInd * 3);
+        return triangleStarts;
+    }
 }

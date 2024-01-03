@@ -40,4 +40,18 @@ namespace Core3d {
         return !tangents.empty();
     }
 
+    int TriangleMesh::nVertices() const
+    {
+        return vertices.size();
+    }
+
+    int TriangleMesh::nTexcoords() const
+    {
+        return texcoords.size();
+    }
+
+    int TriangleMesh::nTriangles() const
+    {
+        return vertexIndices.size() / 3;
+    }
 }

@@ -24,6 +24,10 @@ namespace Core3d {
         bool hasNormals() const;
         bool hasTangents() const;
 
+        int nVertices() const;
+        int nTexcoords() const;
+        int nTriangles() const;
+
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;

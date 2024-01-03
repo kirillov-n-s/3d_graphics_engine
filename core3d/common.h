@@ -20,6 +20,8 @@ namespace Core3d {
                 const std::vector<int> &triangleVertexIndices,
                 const std::vector<glm::vec2> &texcoords,
                 const std::vector<int> &triangleTexcoordIndices);
+
+    std::vector<int> makeTriangleStarts(const int nTriangles);
 }
 
 #endif

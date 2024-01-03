@@ -4,6 +4,7 @@
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include "trianglemesh.h"
 
 namespace Core3d {
 
@@ -20,6 +21,8 @@ namespace Core3d {
                 std::vector<glm::vec3> normals = {},
                 std::vector<glm::vec2> texcoords = {},
                 std::vector<int> texcoordIndices = {});
+
+        explicit PolygonMesh(const TriangleMesh &triangleMesh);
 
         bool hasTexcoords() const;
         bool hasNormals() const;

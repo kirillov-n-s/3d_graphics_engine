@@ -13,6 +13,7 @@ add_executable (
         "core3d/common.h" "core3d/common.cpp"
         "core3d/trianglemesh.h" "core3d/trianglemesh.cpp"
         "core3d/polygonmesh.h" "core3d/polygonmesh.cpp"
+        "core3d/shapes.h" "core3d/shapes.cpp"
 
         "core2d/image.h" "core2d/image.cpp"
 
