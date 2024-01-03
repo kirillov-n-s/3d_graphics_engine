@@ -16,6 +16,7 @@ add_executable (
 
         "io/obj.h" "io/obj.cpp"
         "io/image.h" "io/image.cpp"
+        "io/stb_image/stb_image.h" "io/stb_image/stb_image.cpp"
 
         "rendering/camera.h" "rendering/camera.cpp"
         "rendering/window.h" "rendering/window.cpp"
@@ -30,8 +31,6 @@ add_executable (
 
         "demos/common.h" "demos/common.cpp"
         "demos/basicdemo.h" "demos/basicdemo.cpp"
-
-        "stb_image/stb_image.h" "stb_image/stb_image.cpp"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
