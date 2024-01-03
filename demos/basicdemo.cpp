@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../geometry/common.h"
-#include "../geometry/directions.h"
+#include "../core3d/common.h"
+#include "../core3d/directions.h"
 #include "../common/debug.h"
 #include "../io/obj.h"
 #include "basicdemo.h"
@@ -95,7 +95,7 @@ namespace Demos {
     void BasicDemo::initShaders()
     {
         const std::string vertPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main.vert)";
-        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\phong_with_normals.frag)";
+        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\phong.frag)";
 
         std::string error = "";
 
@@ -123,7 +123,7 @@ namespace Demos {
 
         std::string error = "";
 
-        const Geometry::PolygonMesh objPoly = IO::readObj(
+        const Core3d::PolygonMesh objPoly = IO::readObj(
             objPath,
             error,
             IO::ObjReaderSettings {
@@ -131,13 +131,13 @@ namespace Demos {
             });
         Common::exitOnError(error, 4);
 
-        const std::vector<int> triangleVertexIndices = Geometry::triangulate(
+        const std::vector<int> triangleVertexIndices = Core3d::triangulate(
             objPoly.vertexIndices, objPoly.polygonStarts);
-        const std::vector<int> triangleTexcoordIndices = Geometry::triangulate(
+        const std::vector<int> triangleTexcoordIndices = Core3d::triangulate(
             objPoly.texcoordIndices, objPoly.polygonStarts);
-        const std::vector<glm::vec3> normals = Geometry::computeNormals(
+        const std::vector<glm::vec3> normals = Core3d::computeNormals(
             objPoly.vertices, triangleVertexIndices);
-        const Geometry::TriangleMesh objTri(
+        const Core3d::TriangleMesh objTri(
             objPoly.vertices,
             triangleVertexIndices,
             normals,
@@ -149,15 +149,17 @@ namespace Demos {
         m_glMesh = std::make_shared<Rendering::Meshes::GlMesh>(*m_meshBuffer);
 
         const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_albedo.png)";
-        m_texture = std::make_shared<Rendering::Textures::GlTexture>(albedoPath);
+        const Core2d::Image albedoImage(albedoPath);
+        m_texture = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, false);
 
         const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_normalmap.png)";
-        m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapPath);
+        const Core2d::Image normalMapImage(normalMapPath);
+        m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
     }
 
     void BasicDemo::initCamera()
     {
-        const glm::vec3 cameraPos = Geometry::Directions::backward * 50.0f;
+        const glm::vec3 cameraPos = Core3d::Directions::backward * 50.0f;
         m_camera = Rendering::Camera(cameraPos);
     }
 
@@ -173,9 +175,9 @@ namespace Demos {
         if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
             direction -= m_camera.right();
         if (glfwGetKey(m_window, GLFW_KEY_Q) == GLFW_PRESS)
-            direction += Geometry::Directions::up;
+            direction += Core3d::Directions::up;
         if (glfwGetKey(m_window, GLFW_KEY_E) == GLFW_PRESS)
-            direction -= Geometry::Directions::up;
+            direction -= Core3d::Directions::up;
         m_camera.move(direction * dt * m_speed);
     }
 
@@ -185,7 +187,7 @@ namespace Demos {
         m_glShaderProgram->setUniform("uView", m_camera.view());
         m_glShaderProgram->setUniform("uCameraDir", m_camera.front());
         m_texture->use(0);
-        m_normalMap->use(1);
+        // m_normalMap->use(1);
         m_glMesh->draw();
     }
 

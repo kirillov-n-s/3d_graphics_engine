@@ -1,11 +1,11 @@
-#ifndef GEOMETRY_TRIANGLE_MESH_H
-#define GEOMETRY_TRIANGLE_MESH_H
+#ifndef CORE3D_TRIANGLE_MESH_H
+#define CORE3D_TRIANGLE_MESH_H
 
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
-namespace Geometry {
+namespace Core3d {
     class TriangleMesh
     {
     public:

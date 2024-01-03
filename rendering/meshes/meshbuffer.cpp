@@ -3,7 +3,7 @@
 
 namespace Rendering::Meshes {
 
-    MeshIndex makeIndex(const Geometry::TriangleMesh &mesh, const int flatIndex)
+    MeshIndex makeIndex(const Core3d::TriangleMesh &mesh, const int flatIndex)
     {
         return {
                 .vertex = mesh.vertexIndices[flatIndex],
@@ -16,7 +16,7 @@ namespace Rendering::Meshes {
         };
     }
 
-    MeshPoint pointAtIndex(const Geometry::TriangleMesh &mesh, const MeshIndex &index)
+    MeshPoint pointAtIndex(const Core3d::TriangleMesh &mesh, const MeshIndex &index)
     {
         return {
                 .vertex = mesh.vertices[index.vertex],
@@ -53,7 +53,7 @@ namespace Rendering::Meshes {
         return !(lhs == rhs);
     }
 
-    MeshBuffer::MeshBuffer(const Geometry::TriangleMesh &mesh)
+    MeshBuffer::MeshBuffer(const Core3d::TriangleMesh &mesh)
     {
         std::unordered_map<MeshIndex, unsigned int> indToElemMap;
         const int nFlatIndices = mesh.vertexIndices.size();

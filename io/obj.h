@@ -2,7 +2,7 @@
 #define IO_OBJ_H
 
 #include <string>
-#include "../geometry/polygonmesh.h"
+#include "../core3d/polygonmesh.h"
 
 namespace IO {
 
@@ -19,13 +19,13 @@ namespace IO {
         bool writeNormals = true;
     };
 
-    Geometry::PolygonMesh readObj(
+    Core3d::PolygonMesh readObj(
             const std::string &path,
             std::string &error,
             const ObjReaderSettings &settings = {});
 
     void writeObj(
-            const Geometry::PolygonMesh &mesh,
+            const Core3d::PolygonMesh &mesh,
             const std::string &path,
             std::string &error,
             const ObjWriterSettings &settings = {});

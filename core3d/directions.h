@@ -1,9 +1,9 @@
-#ifndef GEOMETRY_DIRECTIONS_H
-#define GEOMETRY_DIRECTIONS_H
+#ifndef CORE3D_DIRECTIONS_H
+#define CORE3D_DIRECTIONS_H
 
 #include <glm/vec3.hpp>
 
-namespace Geometry::Directions {
+namespace Core3d::Directions {
 
     const glm::vec3 zero(0.0f);
     const glm::vec3 right(1.0f, 0.0f, 0.0f);

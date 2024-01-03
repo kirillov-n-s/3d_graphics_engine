@@ -2,13 +2,14 @@
 #define RENDERING_TEXTURES_GLTEXTURE_H
 
 #include <string>
+#include "../../core2d/image.h"
 
 namespace Rendering::Textures {
 
     class GlTexture
     {
     public:
-        explicit GlTexture(const std::string &path);
+        explicit GlTexture(const Core2d::Image &image, const bool useSrgb = false);
         ~GlTexture();
 
         void use(const int textureUnit = 0) const;

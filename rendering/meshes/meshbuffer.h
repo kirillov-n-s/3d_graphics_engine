@@ -4,7 +4,7 @@
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-#include "../../geometry/trianglemesh.h"
+#include "../../core3d/trianglemesh.h"
 
 namespace Rendering::Meshes {
 
@@ -22,9 +22,9 @@ namespace Rendering::Meshes {
         int normal = -1;
     };
 
-    MeshIndex makeIndex(const Geometry::TriangleMesh &mesh, const int flatIndex);
+    MeshIndex makeIndex(const Core3d::TriangleMesh &mesh, const int flatIndex);
 
-    MeshPoint pointAtIndex(const Geometry::TriangleMesh &mesh, const MeshIndex &index);
+    MeshPoint pointAtIndex(const Core3d::TriangleMesh &mesh, const MeshIndex &index);
 
     bool operator==(const MeshIndex &lhs, const MeshIndex &rhs);
     bool operator!=(const MeshIndex &lhs, const MeshIndex &rhs);
@@ -35,7 +35,7 @@ namespace Rendering::Meshes {
     class MeshBuffer
     {
     public:
-        explicit MeshBuffer(const Geometry::TriangleMesh &mesh);
+        explicit MeshBuffer(const Core3d::TriangleMesh &mesh);
 
         void updateGeometry(
                 const std::vector<glm::vec3> &vertices,

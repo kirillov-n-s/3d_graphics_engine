@@ -6,7 +6,7 @@
 
 namespace IO {
 
-    Geometry::PolygonMesh readObj(
+    Core3d::PolygonMesh readObj(
             const std::string &path,
             std::string &error,
             const ObjReaderSettings &settings)
@@ -194,7 +194,7 @@ namespace IO {
     }
 
     void writeObj(
-            const Geometry::PolygonMesh &mesh,
+            const Core3d::PolygonMesh &mesh,
             const std::string &path,
             std::string &error,
             const ObjWriterSettings &settings)

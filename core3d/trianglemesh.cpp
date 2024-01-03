@@ -1,7 +1,7 @@
 #include "common.h"
 #include "trianglemesh.h"
 
-namespace Geometry {
+namespace Core3d {
 
     TriangleMesh::TriangleMesh(
         std::vector<glm::vec3> vertices,

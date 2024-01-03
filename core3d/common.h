@@ -1,10 +1,10 @@
-#ifndef GEOMETRY_COMMON_H
-#define GEOMETRY_COMMON_H
+#ifndef CORE3D_COMMON_H
+#define CORE3D_COMMON_H
 
 #include <vector>
 #include <glm/vec3.hpp>
 
-namespace Geometry {
+namespace Core3d {
 
     std::vector<glm::vec3> computeNormals(
             const std::vector<glm::vec3> &vertices,

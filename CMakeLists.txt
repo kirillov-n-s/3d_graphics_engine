@@ -9,13 +9,14 @@ add_executable (
         "common/debug.h" "common/debug.cpp"
         "common/common.h" "common/common.cpp"
 
-        "geometry/directions.h"
-        "geometry/common.h" "geometry/common.cpp"
-        "geometry/trianglemesh.h" "geometry/trianglemesh.cpp"
-        "geometry/polygonmesh.h" "geometry/polygonmesh.cpp"
+        "core3d/directions.h"
+        "core3d/common.h" "core3d/common.cpp"
+        "core3d/trianglemesh.h" "core3d/trianglemesh.cpp"
+        "core3d/polygonmesh.h" "core3d/polygonmesh.cpp"
+
+        "core2d/image.h" "core2d/image.cpp"
 
         "io/obj.h" "io/obj.cpp"
-        "io/image.h" "io/image.cpp"
         "io/stb_image/stb_image.h" "io/stb_image/stb_image.cpp"
 
         "rendering/camera.h" "rendering/camera.cpp"

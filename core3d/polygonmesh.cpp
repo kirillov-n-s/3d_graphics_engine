@@ -2,7 +2,7 @@
 #include "../Common/Common.h"
 #include "polygonmesh.h"
 
-namespace Geometry {
+namespace Core3d {
 
     PolygonMesh::PolygonMesh(
             std::vector<glm::vec3> vertices,

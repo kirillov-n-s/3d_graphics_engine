@@ -2,7 +2,7 @@
 #include "../common/common.h"
 #include "common.h"
 
-namespace Geometry {
+namespace Core3d {
 
     std::vector<glm::vec3> computeNormals(
             const std::vector<glm::vec3> &vertices,
