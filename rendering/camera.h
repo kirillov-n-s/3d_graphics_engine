@@ -15,6 +15,8 @@ namespace Rendering {
                 const glm::vec3 &position,
                 const float yaw = -90.f, const float pitch = 0.f);
 
+        glm::vec3 position() const;
+
         glm::vec3 front() const;
         glm::vec3 right() const;
         glm::vec3 up() const;

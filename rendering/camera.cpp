@@ -13,6 +13,11 @@ namespace Rendering {
         updateDerivedVectors();
     }
 
+    glm::vec3 Camera::position() const
+    {
+        return m_position;
+    }
+
     glm::vec3 Camera::front() const
     {
         return m_front;

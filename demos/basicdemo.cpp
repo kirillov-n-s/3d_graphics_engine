@@ -12,6 +12,7 @@ namespace Demos {
         initWindow();
         initShaders();
         initMeshes();
+        initTextures();
         initCamera();
     }
 
@@ -38,7 +39,12 @@ namespace Demos {
         m_glShaderProgram->setUniform("uNormalModel", m_normalModelMat);
         m_glShaderProgram->setUniform("uAlbedo", 0);
         m_glShaderProgram->setUniform("uNormalMap", 1);
-
+        if (m_roughness != nullptr)
+            m_glShaderProgram->setUniform("uRoughness", 2);
+        if (m_metallic != nullptr)
+            m_glShaderProgram->setUniform("uMetallic", 3);
+        if (m_ambientOcclusion != nullptr)
+            m_glShaderProgram->setUniform("uAO", 4);
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
@@ -96,7 +102,7 @@ namespace Demos {
     void BasicDemo::initShaders()
     {
         const std::string vertPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main_with_tbn.vert)";
-        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\phong_with_tbn.frag)";
+        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\pbr_with_tbn.frag)";
 
         std::string error = "";
 
@@ -120,6 +126,7 @@ namespace Demos {
 
     void BasicDemo::initMeshes()
     {
+        // const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\uv_sphere.obj)";
         const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\watermelon_23k.obj)";
 
         std::string error = "";
@@ -148,15 +155,57 @@ namespace Demos {
 
         m_meshBuffer = std::make_shared<Rendering::Meshes::MeshBuffer>(objTri);
         m_glMesh = std::make_shared<Rendering::Meshes::GlMesh>(*m_meshBuffer);
+    }
+
+    void BasicDemo::initTextures()
+    {
+        // const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_OldCopper_Aged\albedo.png)";
+        // const Core2d::Image albedoImage(albedoPath);
+        // m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, true);
+        //
+        // const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_OldCopper_Aged\normal.png)";
+        // const Core2d::Image normalMapImage(normalMapPath);
+        // m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
+        //
+        // const std::string roughnessPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_OldCopper_Aged\roughness.png)";
+        // const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
+        // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
+        //
+        // const std::string metallicPath = R"((C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_OldCopper_Aged\metallic.png)";
+        // const Core2d::Image metallicImage(metallicPath, Core2d::ImageFormat::Grayscale);
+        // m_metallic = std::make_shared<Rendering::Textures::GlTexture>(metallicImage, false);
+
 
         const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_albedo.png)";
         const Core2d::Image albedoImage(albedoPath);
-        m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, false);
+        m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, true);
 
         const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_normalmap.png)";
         const Core2d::Image normalMapImage(normalMapPath);
         m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
+
+        const std::string roughnessPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_roughness.png)";
+        const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
+        m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
+
+
+        // const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_Rock_CliffLayered\albedo.png)";
+        // const Core2d::Image albedoImage(albedoPath);
+        // m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, true);
+        //
+        // const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_Rock_CliffLayered\normal.png)";
+        // const Core2d::Image normalMapImage(normalMapPath);
+        // m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
+        //
+        // const std::string roughnessPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_Rock_CliffLayered\roughness.png)";
+        // const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
+        // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
+        //
+        // const std::string aoPath = R"(C:\Users\kirillov_n_s\Desktop\Images\Assets\TCom_Rock_CliffLayered\ao.png)";
+        // const Core2d::Image aoImage(aoPath, Core2d::ImageFormat::Grayscale);
+        // m_ambientOcclusion = std::make_shared<Rendering::Textures::GlTexture>(aoImage, false);
     }
+
 
     void BasicDemo::initCamera()
     {
@@ -186,9 +235,15 @@ namespace Demos {
     {
         m_glShaderProgram->use();
         m_glShaderProgram->setUniform("uView", m_camera.view());
-        m_glShaderProgram->setUniform("uCameraDir", m_camera.front());
+        m_glShaderProgram->setUniform("uCameraPos", m_camera.position());
         m_albedo->use(0);
         m_normalMap->use(1);
+        if (m_roughness != nullptr)
+            m_roughness->use(2);
+        if (m_metallic != nullptr)
+            m_metallic->use(3);
+        if (m_ambientOcclusion != nullptr)
+            m_ambientOcclusion->use(4);
         m_glMesh->draw();
     }
 

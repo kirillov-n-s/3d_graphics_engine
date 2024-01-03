@@ -2,6 +2,7 @@
 #define DEMOS_BASIC_DEMO_H
 
 #include <memory>
+#include "../core3d/directions.h"
 #include "../rendering/window.h"
 #include "../rendering/camera.h"
 #include "../rendering/textures/gltexture.h"
@@ -22,6 +23,7 @@ namespace Demos {
         void initWindow();
         void initShaders();
         void initMeshes();
+        void initTextures();
         void initCamera();
 
         void handleCameraMovement(const float dt);
@@ -37,6 +39,9 @@ namespace Demos {
 
         std::shared_ptr<Rendering::Textures::GlTexture> m_albedo;
         std::shared_ptr<Rendering::Textures::GlTexture> m_normalMap;
+        std::shared_ptr<Rendering::Textures::GlTexture> m_roughness;
+        std::shared_ptr<Rendering::Textures::GlTexture> m_metallic;
+        std::shared_ptr<Rendering::Textures::GlTexture> m_ambientOcclusion;
 
         int m_width = 0;
         int m_height = 0;
@@ -53,7 +58,11 @@ namespace Demos {
 
         bool m_camRotationOn = false;
 
-        glm::mat4 m_modelMat = glm::mat4 { 1.0f };
+        // glm::mat4 m_modelMat = glm::rotate(
+        //         glm::identity<glm::mat4>(),
+        //         -glm::pi<float>() * 0.5f,
+        //         Core3d::Directions::right);
+        glm::mat4 m_modelMat = glm::identity<glm::mat4>();
         glm::mat4 m_normalModelMat = glm::transpose(glm::inverse(m_modelMat));
 
         glm::vec4 m_backgroundColor = glm::vec4(0.4f, 0.4f, 0.4f, 1.0f);
