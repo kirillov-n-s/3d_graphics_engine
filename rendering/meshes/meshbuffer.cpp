@@ -12,7 +12,10 @@ namespace Rendering::Meshes {
                     : -1,
                 .normal = mesh.hasNormals()
                     ? mesh.vertexIndices[flatIndex]
-                    : -1
+                    : -1,
+                .tangent = mesh.hasTangents()
+                    ? mesh.vertexIndices[flatIndex]
+                    : -1,
         };
     }
 
@@ -25,6 +28,9 @@ namespace Rendering::Meshes {
                     : glm::vec3(0.f),
                 .normal = index.normal != -1
                     ? mesh.normals[index.normal]
+                    : glm::vec3(0.f),
+                .tangent = index.tangent != -1
+                    ? mesh.tangents[index.tangent]
                     : glm::vec3(0.f)
         };
     }
@@ -33,7 +39,8 @@ namespace Rendering::Meshes {
     {
         return lhs.vertex == rhs.vertex
                && lhs.texcoord == rhs.texcoord
-               && lhs.normal == rhs.normal;
+               && lhs.normal == rhs.normal
+               && lhs.tangent == rhs.tangent;
     }
 
     bool operator!=(const MeshIndex &lhs, const MeshIndex &rhs)
@@ -45,7 +52,8 @@ namespace Rendering::Meshes {
     {
         return lhs.vertex == rhs.vertex
                && lhs.texcoord == rhs.texcoord
-               && lhs.normal == rhs.normal;
+               && lhs.normal == rhs.normal
+               && lhs.tangent == rhs.tangent;
     }
 
     bool operator!=(const MeshPoint &lhs, const MeshPoint &rhs)

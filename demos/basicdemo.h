@@ -35,7 +35,7 @@ namespace Demos {
         std::shared_ptr<Rendering::Meshes::MeshBuffer> m_meshBuffer;
         std::shared_ptr<Rendering::Meshes::GlMesh> m_glMesh;
 
-        std::shared_ptr<Rendering::Textures::GlTexture> m_texture;
+        std::shared_ptr<Rendering::Textures::GlTexture> m_albedo;
         std::shared_ptr<Rendering::Textures::GlTexture> m_normalMap;
 
         int m_width = 0;

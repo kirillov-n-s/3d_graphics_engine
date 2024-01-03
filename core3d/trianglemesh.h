@@ -17,14 +17,17 @@ namespace Core3d {
             std::vector<int> vertexIndices,
             std::vector<glm::vec3> normals = {},
             std::vector<glm::vec2> texcoords = {},
-            std::vector<int> texcoordIndices = {});
+            std::vector<int> texcoordIndices = {},
+            std::vector<glm::vec3> tangents = {});
 
         bool hasTexcoords() const;
         bool hasNormals() const;
+        bool hasTangents() const;
 
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
+        std::vector<glm::vec3> tangents;
 
         std::vector<int> vertexIndices;
         std::vector<int> texcoordIndices;

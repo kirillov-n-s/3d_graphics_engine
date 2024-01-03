@@ -13,6 +13,7 @@ namespace Rendering::Meshes {
         glm::vec3 vertex = glm::vec3(0.0f);
         glm::vec2 texcoord = glm::vec2(0.0f);
         glm::vec3 normal = glm::vec3(0.0f);
+        glm::vec3 tangent = glm::vec3(0.0f);
     };
 
     struct MeshIndex
@@ -20,6 +21,7 @@ namespace Rendering::Meshes {
         int vertex = -1;
         int texcoord = -1;
         int normal = -1;
+        int tangent = -1;
     };
 
     MeshIndex makeIndex(const Core3d::TriangleMesh &mesh, const int flatIndex);
@@ -54,7 +56,8 @@ struct std::hash<Rendering::Meshes::MeshIndex>
     {
         return std::hash<int>{}(index.vertex)
                ^ std::hash<int>{}(index.texcoord)
-               ^ std::hash<int>{}(index.normal);
+               ^ std::hash<int>{}(index.normal)
+               ^ std::hash<int>{}(index.tangent);
     }
 };
 

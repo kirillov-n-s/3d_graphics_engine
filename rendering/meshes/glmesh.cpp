@@ -42,6 +42,14 @@ namespace Rendering::Meshes {
             sizeof(MeshPoint),
             reinterpret_cast<void *>(offsetof(MeshPoint, normal)));
         glEnableVertexAttribArray(2);
+        glVertexAttribPointer(
+            3,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            sizeof(MeshPoint),
+            reinterpret_cast<void *>(offsetof(MeshPoint, tangent)));
+        glEnableVertexAttribArray(3);
 
         glGenBuffers(1, &m_elementBufferObject);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferObject);

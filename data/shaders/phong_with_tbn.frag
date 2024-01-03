@@ -1,25 +1,28 @@
 #version 460 core
 
-in vec3 Position;
-in vec3 Normal;
-in vec2 Texcoord;
+in vec3 vPosition;
+in vec2 vTexcoord;
+in mat3 vTBN;
 
 out vec4 FragColor;
 
 uniform vec3 uCameraDir;
-uniform sampler2D uTexture;
+
+uniform sampler2D uAlbedo;
 uniform sampler2D uNormalMap;
 
 void main()
 {
-    FragColor = texture(uTexture, Texcoord);
-    vec3 Normal2 = texture(uNormalMap, Texcoord).rgb;
-    Normal2 = normalize(Normal2 * 2.0 - 1.0);
+    FragColor = texture(uAlbedo, vTexcoord);
 
-    if (Normal2 != vec3(0.0))
+    vec3 vNormal = texture(uNormalMap, vTexcoord).rgb;
+    vNormal = vNormal * 2.0 - 1.0;
+    vNormal = normalize(vTBN * vNormal);
+
+    if (vNormal != vec3(0.0))
     {
         vec3 neglightdir = -normalize(vec3(0.0, 0.0, -1.0));
-        vec3 normal = normalize(Normal2);
+        vec3 normal = normalize(vNormal);
 
         vec3 k_ambient = vec3(0.3);
         vec3 k_diffuse = vec3(0.5);
