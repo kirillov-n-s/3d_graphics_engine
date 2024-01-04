@@ -31,7 +31,7 @@ float clamp01(float x);
 void main()
 {
     vec3 lightPos = vec3(0.0, 0.0, 50.0);
-    vec3 lightColor = vec3(1.0) * 200;
+    vec3 lightColor = vec3(1.0) * 10;
 
     vec3 albedo = texture(uAlbedo, vTexcoord).rgb;
 
@@ -41,8 +41,8 @@ void main()
 
     float roughness = texture(uRoughness, vTexcoord).r;
 
-//    float metallic = texture(uMetallic, vTexcoord).r;
-    float metallic = 0.0;
+    float metallic = texture(uMetallic, vTexcoord).r;
+//    float metallic = 0.0;
     vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
@@ -59,7 +59,7 @@ void main()
         vec3 lightDir = normalize(lightPos - vPosition);
         vec3 halfwayDir = normalize(lightDir + viewDir);
         float lightDistance = length(lightPos - vPosition);
-        float lightAttenuation = 1.0 / sqr(lightDistance);
+        float lightAttenuation = 1.0 / (1.0 + 0.2 * lightDistance);
         vec3 radiance = lightColor * lightAttenuation;
 
         // BRDF
@@ -72,7 +72,7 @@ void main()
     vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
 
-    // gamma correction + hdr
+    // tone mapping + gamma correction
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0 / 2.2));
 

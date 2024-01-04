@@ -8,6 +8,7 @@
 #include "../rendering/textures/gltexture.h"
 #include "../rendering/meshes/glmesh.h"
 #include "../rendering/shaders/glshaderprogram.h"
+#include "../rendering/textures/glcubemap.h"
 
 namespace Demos {
 
@@ -24,6 +25,7 @@ namespace Demos {
         void initShaders();
         void initMeshes();
         void initTextures();
+        void initEnvironment();
         void initCamera();
 
         void handleCameraMovement(const float dt);
@@ -42,6 +44,9 @@ namespace Demos {
         std::shared_ptr<Rendering::Textures::GlTexture> m_roughness;
         std::shared_ptr<Rendering::Textures::GlTexture> m_metallic;
         std::shared_ptr<Rendering::Textures::GlTexture> m_ambientOcclusion;
+
+        std::shared_ptr<Rendering::Textures::GlCubemap> m_glCubemap;
+        std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_glCubemapShaderProgram;
 
         int m_width = 0;
         int m_height = 0;

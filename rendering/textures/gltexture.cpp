@@ -14,15 +14,16 @@ namespace Rendering::Textures {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        const int glImageFormat = Core2d::formatToGlValue(image.format());
+        const int glFormat = Core2d::formatToGlFormat(image.format());
+        const int glInternalFormat = Core2d::formatToGlInternalFormat(image.format());
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            useSrgb ? GL_SRGB : glImageFormat,
+            useSrgb ? GL_SRGB : glInternalFormat,
             image.width(), image.height(),
             0,
-            glImageFormat,
-            GL_UNSIGNED_BYTE,
+            glFormat,
+            static_cast<int>(image.dtype()),
             image.data());
     }
 
