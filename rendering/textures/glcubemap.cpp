@@ -4,7 +4,9 @@
 
 namespace Rendering::Textures {
 
-    GlCubemap::GlCubemap(const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces)
+    GlCubemap::GlCubemap(
+        const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces,
+        const bool generateMipmap)
     {
         glGenTextures(1, &m_textureId);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
@@ -24,16 +26,27 @@ namespace Rendering::Textures {
                 cubeFace->data());
         }
 
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        const int minFilter = generateMipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR;
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, minFilter);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        if (generateMipmap)
+            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     }
 
     GlCubemap::~GlCubemap()
     {
         glDeleteTextures(1, &m_textureId);
+    }
+
+    void GlCubemap::use(const int textureUnit) const
+    {
+        glActiveTexture(GL_TEXTURE0 + textureUnit);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
     }
 
     void GlCubemap::draw(const int textureUnit) const
@@ -42,9 +55,7 @@ namespace Rendering::Textures {
         glDisable(GL_CULL_FACE);
         glDepthMask(GL_FALSE);
 
-        glActiveTexture(GL_TEXTURE0 + textureUnit);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
-
+        this->use(textureUnit);
         m_glCube.draw();
 
         glDepthMask(GL_TRUE);

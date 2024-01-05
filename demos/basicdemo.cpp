@@ -47,10 +47,11 @@ namespace Demos {
             m_glShaderProgram->setUniform("uMetallic", 3);
         if (m_ambientOcclusion != nullptr)
             m_glShaderProgram->setUniform("uAO", 4);
+        m_glShaderProgram->setUniform("uIrradiance", 5);
 
-        m_glCubemapShaderProgram->use();
-        m_glCubemapShaderProgram->setUniform("uProjection", projectionMat);
-        m_glCubemapShaderProgram->setUniform("uEnvironment", 0);
+        m_envCubemapShaderProgram->use();
+        m_envCubemapShaderProgram->setUniform("uProjection", projectionMat);
+        m_envCubemapShaderProgram->setUniform("uEnvironment", 0);
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
@@ -112,7 +113,7 @@ namespace Demos {
     void BasicDemo::initShaders()
     {
         const std::string vertPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main_with_tbn.vert)";
-        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\pbr_with_tbn.frag)";
+        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\pbr_with_tbn_with_ibl.frag)";
 
         std::string error = "";
 
@@ -136,8 +137,8 @@ namespace Demos {
 
     void BasicDemo::initMeshes()
     {
-        // const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\uv_sphere.obj)";
-        const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\watermelon_23k.obj)";
+        const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\uv_sphere.obj)";
+        // const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\meshes\watermelon_23k.obj)";
         // const std::string objPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Meshes\TCom_debris_stick_004_lod0\stick.obj)";
 
         std::string error = "";
@@ -169,17 +170,17 @@ namespace Demos {
 
     void BasicDemo::initTextures()
     {
-        const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_albedo.png)";
-        const Core2d::Image albedoImage(albedoPath);
-        m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, true);
-
-        const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_normalmap.png)";
-        const Core2d::Image normalMapImage(normalMapPath);
-        m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
-
-        const std::string roughnessPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_roughness.png)";
-        const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
-        m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
+        // const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_albedo.png)";
+        // const Core2d::Image albedoImage(albedoPath);
+        // m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, true);
+        //
+        // const std::string normalMapPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_normalmap.png)";
+        // const Core2d::Image normalMapImage(normalMapPath);
+        // m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
+        //
+        // const std::string roughnessPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\textures\watermelon_roughness.png)";
+        // const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
+        // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
 
 
         // const std::string albedoPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Meshes\TCom_debris_stick_004_lod0\albedo.png)";
@@ -195,27 +196,27 @@ namespace Demos {
         // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
 
 
-        // const std::string commonPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Materials\TCom_SolarCells_4K\)";
-        //
-        // const std::string albedoPath = commonPath + "albedo.png";
-        // const Core2d::Image albedoImage(albedoPath);
-        // m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, false);
-        //
-        // const std::string normalMapPath = commonPath + "normal.png";
-        // const Core2d::Image normalMapImage(normalMapPath);
-        // m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
-        //
-        // const std::string roughnessPath = commonPath + "roughness.png";
-        // const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
-        // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
-        //
-        // const std::string metallicPath = commonPath + "metallic.png";
-        // const Core2d::Image metallicImage(metallicPath, Core2d::ImageFormat::Grayscale);
-        // m_metallic = std::make_shared<Rendering::Textures::GlTexture>(metallicImage, false);
-        //
-        // const std::string aoPath = commonPath + "ao.png";
-        // const Core2d::Image aoImage(aoPath, Core2d::ImageFormat::Grayscale);
-        // m_ambientOcclusion = std::make_shared<Rendering::Textures::GlTexture>(aoImage, false);
+        const std::string commonPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Materials\TCom_Scifi_Panel_4K\)";
+
+        const std::string albedoPath = commonPath + "albedo.png";
+        const Core2d::Image albedoImage(albedoPath);
+        m_albedo = std::make_shared<Rendering::Textures::GlTexture>(albedoImage, false);
+
+        const std::string normalMapPath = commonPath + "normal.png";
+        const Core2d::Image normalMapImage(normalMapPath);
+        m_normalMap = std::make_shared<Rendering::Textures::GlTexture>(normalMapImage, false);
+
+        const std::string roughnessPath = commonPath + "roughness.png";
+        const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
+        m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
+
+        const std::string metallicPath = commonPath + "metallic.png";
+        const Core2d::Image metallicImage(metallicPath, Core2d::ImageFormat::Grayscale);
+        m_metallic = std::make_shared<Rendering::Textures::GlTexture>(metallicImage, false);
+
+        const std::string aoPath = commonPath + "ao.png";
+        const Core2d::Image aoImage(aoPath, Core2d::ImageFormat::Grayscale);
+        m_ambientOcclusion = std::make_shared<Rendering::Textures::GlTexture>(aoImage, false);
     }
 
     void BasicDemo::initEnvironment()
@@ -223,11 +224,15 @@ namespace Demos {
         const std::string commonEnvPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Environments\)";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_HDRPanorama0035_colorful_alley_8K_hdri_sphere.hdr";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_NorwayForest_8K_hdri_sphere.hdr";
-        const std::string equirectangularMapPath = commonEnvPath + "kloofendal_43d_clear_16k.hdr";
+        // const std::string equirectangularMapPath = commonEnvPath + "TCom_JapanParkingGarageB_8K_hdri_sphere.hdr";
+        const std::string equirectangularMapPath = commonEnvPath + "laufenurg_church_16k.hdr";
         const Core2d::Image equirectangularMapImage(equirectangularMapPath);
         const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces =
             Rendering::Textures::equirectangularMapToCubemapFaces(equirectangularMapImage, 4096);
-        m_glCubemap = std::make_shared<Rendering::Textures::GlCubemap>(cubeFaces);
+        const std::array<std::shared_ptr<Core2d::Image>, 6> &irradianceCubeFaces =
+            Rendering::Textures::cubemapToIrradianceMap(cubeFaces, 256);
+        m_envCubemap = std::make_shared<Rendering::Textures::GlCubemap>(cubeFaces);
+        m_irradianceCubemap = std::make_shared<Rendering::Textures::GlCubemap>(irradianceCubeFaces);
 
         std::string error;
         const std::string commonShaderPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\)";
@@ -244,7 +249,7 @@ namespace Demos {
             error);
         Common::exitOnError(error, 421);
 
-        m_glCubemapShaderProgram = std::make_shared<Rendering::Shaders::GlShaderProgram>(
+        m_envCubemapShaderProgram = std::make_shared<Rendering::Shaders::GlShaderProgram>(
             std::vector{vertShader, fragShader},
             error);
         Common::exitOnError(error, 422);
@@ -287,11 +292,12 @@ namespace Demos {
             m_metallic->use(3);
         if (m_ambientOcclusion != nullptr)
             m_ambientOcclusion->use(4);
+        m_irradianceCubemap->use(5);
         m_glMesh->draw();
 
-        m_glCubemapShaderProgram->use();
-        m_glCubemapShaderProgram->setUniform("uView", m_camera.view());
-        m_glCubemap->draw(0);
+        m_envCubemapShaderProgram->use();
+        m_envCubemapShaderProgram->setUniform("uView", m_camera.view());
+        m_envCubemap->draw(0);
     }
 
     void BasicDemo::resizeCallback(

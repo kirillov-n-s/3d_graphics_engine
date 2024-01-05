@@ -45,8 +45,9 @@ namespace Demos {
         std::shared_ptr<Rendering::Textures::GlTexture> m_metallic;
         std::shared_ptr<Rendering::Textures::GlTexture> m_ambientOcclusion;
 
-        std::shared_ptr<Rendering::Textures::GlCubemap> m_glCubemap;
-        std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_glCubemapShaderProgram;
+        std::shared_ptr<Rendering::Textures::GlCubemap> m_envCubemap;
+        std::shared_ptr<Rendering::Textures::GlCubemap> m_irradianceCubemap;
+        std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_envCubemapShaderProgram;
 
         int m_width = 0;
         int m_height = 0;
