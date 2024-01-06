@@ -38,6 +38,10 @@ namespace Rendering::Textures {
             glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     }
 
+    GlCubemap::GlCubemap(const unsigned int preallocatedTextureId)
+        : m_textureId(preallocatedTextureId)
+    {}
+
     GlCubemap::~GlCubemap()
     {
         glDeleteTextures(1, &m_textureId);

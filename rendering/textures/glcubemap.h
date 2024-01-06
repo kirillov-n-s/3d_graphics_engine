@@ -14,6 +14,7 @@ namespace Rendering::Textures {
         explicit GlCubemap(
             const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces,
             const bool generateMipmap = false);
+        explicit GlCubemap(const unsigned int preallocatedTextureId);
         ~GlCubemap();
 
         void use(const int textureUnit = 0) const;

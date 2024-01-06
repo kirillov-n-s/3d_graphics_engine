@@ -49,8 +49,8 @@ namespace IO {
                 file >> w;
                 if (!file)
                     file.clear();
-                else if (settings.errorOnVertex4NotOne && Common::fuzzyCompare(w, 1.0f))
-                    error = "4th vertex coordinate not equal to 1.";
+                else if (settings.errorOnVertex4NotOne && !Common::fuzzyCompare(w, 1.0f))
+                    error = std::string("4th vertex coordinate (") + std::to_string(w) + ") not equal to 1.";
                 if (!error.empty())
                     return {};
                 vertices.push_back(vertex);
@@ -64,8 +64,8 @@ namespace IO {
                 file >> z;
                 if (!file)
                     file.clear();
-                else if (settings.readTexcoords && settings.errorOnTexcoord3NotZero && Common::fuzzyIsNull(z))
-                    error = "3rd texture coordinate not equal to 0.";
+                else if (settings.readTexcoords && settings.errorOnTexcoord3NotZero && !Common::fuzzyIsNull(z))
+                    error = std::string("3rd texture coordinate (") + std::to_string(z) + ") not equal to 0.";
                 if (!error.empty())
                     return {};
                 texcoords.push_back(texcoord);

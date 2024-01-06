@@ -27,6 +27,10 @@ namespace Rendering::Textures {
             image.data());
     }
 
+    GlTexture::GlTexture(const unsigned int preallocatedTextureId)
+        : m_id(preallocatedTextureId)
+    {}
+
     GlTexture::~GlTexture()
     {
         glDeleteTextures(1, &m_id);

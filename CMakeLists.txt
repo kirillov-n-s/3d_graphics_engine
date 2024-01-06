@@ -28,6 +28,7 @@ add_executable (
         "rendering/meshes/meshbuffer.h" "rendering/meshes/meshbuffer.cpp"
         "rendering/meshes/glmesh.h" "rendering/meshes/glmesh.cpp"
         "rendering/meshes/glcube.h" "rendering/meshes/glcube.cpp"
+        "rendering/meshes/glquad.h" "rendering/meshes/glquad.cpp"
 
         "rendering/shaders/glshaderprogram.h" "rendering/shaders/glshaderprogram.cpp"
         "rendering/shaders/glshader.h" "rendering/shaders/glshader.cpp"
@@ -36,6 +37,7 @@ add_executable (
         "rendering/textures/glcubemap.h" "rendering/textures/glcubemap.cpp"
         "rendering/textures/environment.h" "rendering/textures/environment.cpp"
         "rendering/textures/rendertocubemap.h" "rendering/textures/rendertocubemap.cpp"
+        "rendering/textures/rendertotexture.h" "rendering/textures/rendertotexture.cpp"
 
         "demos/common.h" "demos/common.cpp"
         "demos/basicdemo.h" "demos/basicdemo.cpp"

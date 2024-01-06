@@ -10,14 +10,18 @@ namespace Rendering::Textures {
             const int cubeDim,
             const int glTextureInternalFormat,
             const int glTextureFormat,
-            const int glTextureDtype);
+            const int glTextureDtype,
+            const bool generateMipmap = false);
         ~RenderToCubemap();
 
         void useFramebuffer() const;
-        void useFramebufferTexture(const int faceInd) const;
+        void useFramebufferTexture(
+            const int faceInd, const int mipLevel = 0) const;
+        void useRenderbufferAtMipLevel(const int mipLevel) const;
 
         void readFramebuffer(void *outData) const;
 
+        unsigned int textureId(const bool transferTextureOwnership);
     private:
         unsigned int m_framebufferObject = 0;
         unsigned int m_renderbufferObject = 0;
@@ -26,6 +30,8 @@ namespace Rendering::Textures {
         int m_cubemapDim = -1;
         int m_cubemapTextureFormat = -1;
         int m_cubemapTextureDtype = -1;
+
+        bool m_ownsTexture = true;
     };
 }
 

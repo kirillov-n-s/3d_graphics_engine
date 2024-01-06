@@ -46,6 +46,12 @@ namespace Rendering::Textures {
     std::array<std::shared_ptr<Core2d::Image>, 6> cubemapToIrradianceMap(
         const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces,
         const int irradianceCubeDim);
+
+    std::shared_ptr<GlCubemap> prefilterCubemap(
+        const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces,
+        const int prefilteredCubeDim, const int prefilteredMipLevels);
+
+    std::shared_ptr<GlTexture> integrateBrdf(const int lutTextureDim);
 }
 
 #endif

@@ -34,6 +34,8 @@ namespace Demos {
         GLFWwindow *m_window;
 
         std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_glShaderProgram;
+        std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_envCubemapShaderProgram;
+
         Rendering::Camera m_camera;
 
         std::shared_ptr<Rendering::Meshes::MeshBuffer> m_meshBuffer;
@@ -47,7 +49,9 @@ namespace Demos {
 
         std::shared_ptr<Rendering::Textures::GlCubemap> m_envCubemap;
         std::shared_ptr<Rendering::Textures::GlCubemap> m_irradianceCubemap;
-        std::shared_ptr<Rendering::Shaders::GlShaderProgram> m_envCubemapShaderProgram;
+        std::shared_ptr<Rendering::Textures::GlCubemap> m_prefilteredCubemap;
+
+        std::shared_ptr<Rendering::Textures::GlTexture> m_brdfLutTexture;
 
         int m_width = 0;
         int m_height = 0;

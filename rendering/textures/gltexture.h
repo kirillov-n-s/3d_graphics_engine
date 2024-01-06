@@ -10,6 +10,7 @@ namespace Rendering::Textures {
     {
     public:
         explicit GlTexture(const Core2d::Image &image, const bool useSrgb = false);
+        explicit GlTexture(const unsigned int preallocatedTextureId);
         ~GlTexture();
 
         void use(const int textureUnit = 0) const;
