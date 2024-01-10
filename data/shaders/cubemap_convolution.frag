@@ -15,8 +15,6 @@ void main()
     vec3 right = normalize(cross(up, normal));
     up = normalize(cross(normal, right));
 
-    float exposure = 2.0;
-
     vec3 irradiance = vec3(0.0);
 
     float sampleDelta = 0.025;
@@ -29,9 +27,8 @@ void main()
             vec3 tangentSample = vec3(sin(theta) * cos(phi),  sin(theta) * sin(phi), cos(theta));
             // tangent space to world
             vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * normal;
+
             vec3 envColor = texture(uEnvironment, sampleVec).rgb;
-            envColor = vec3(1.0) - exp(-envColor * exposure);
-//            envColor = pow(envColor, vec3(1.0 / 2.2));
             irradiance += envColor * cos(theta) * sin(theta);
         }
     }

@@ -46,6 +46,7 @@ void main()
     normal = normalize(vTBN * normal);
 
     float roughness = texture(uRoughness, vTexcoord).r;
+//    float roughness = 0.0;
 
     float metallic = texture(uMetallic, vTexcoord).r;
 //    float metallic = 0.0;
@@ -85,7 +86,7 @@ void main()
     vec3 irradiance = texture(uIrradiance, normal).rgb;
     vec3 diffuse = irradiance * albedo;
 
-    const float uMaxReflectionLod = 7.0; // bug needs to be a uniform
+    const float uMaxReflectionLod = 7.0; // bug: needs to be a uniform
     float roughnessLod = roughness * uMaxReflectionLod;
     vec3 prefilteredColor = textureLod(uPrefilteredEnv, reflected, roughnessLod).rgb;
     vec2 envBRDF = texture(uBrdfLUT, vec2(NdotV, roughness)).rg;
@@ -97,7 +98,7 @@ void main()
 
     // tone mapping + gamma correction
 //    color = color / (color + vec3(1.0));
-//    color = vec3(1.0) - exp(-color);
+    color = vec3(1.0) - exp(-color);
     color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);

@@ -12,6 +12,7 @@ uniform float uRoughness;
 float RadicalInverse_VdC(uint bits);
 vec2 HammersleySequenceSample(uint i, uint N);
 vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness);
+float NDF_TrowbridgeReitzGGX(float NdotH, float roughness);
 
 void main()
 {
@@ -19,20 +20,37 @@ void main()
     vec3 R = N;
     vec3 V = R;
 
-    float exposure = 2.0;
+    vec3 prefilteredColor = vec3(0.0);
 
     const uint nSamples = 4096u;
     float totalWeight = 0.0;
-    vec3 prefilteredColor = vec3(0.0);
     for (uint sampleInd = 0u; sampleInd < nSamples; ++sampleInd)
     {
         vec2 Xi = HammersleySequenceSample(sampleInd, nSamples);
         vec3 H  = ImportanceSampleGGX(Xi, N, uRoughness);
         vec3 L  = normalize(2.0 * dot(V, H) * H - V);
 
-        vec3 envColor = texture(uEnvironment, L).rgb;
-        envColor = vec3(1.0) - exp(-envColor * exposure);
-//        envColor = pow(envColor, vec3(1.0 / 2.2));
+        float NdotH = max(dot(N, H), 0.0);
+        float HdotV = max(dot(V, H), 0.0);
+
+        float D = NDF_TrowbridgeReitzGGX(NdotH, uRoughness);
+        float pdf = (D * NdotH / (4.0 * HdotV)) + 0.0001;
+
+        float resolution = 4096.0; // resolution of source cubemap (per face), bug: needs to be a uniform
+//        float saTexel  = 4.0 * PI / (6.0 * resolution * resolution);
+//        float saSample = 1.0 / (float(nSamples) * pdf + 0.0001);
+//        float mipLevel = uRoughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
+
+        // rewrite using logarithm rules for theoretically better accuracy
+        float logPdf = log2(pdf);
+        float logNsamples = log2(nSamples);
+        float logResolution = log2(resolution);
+        const float C1 = log2(4.0 * PI);
+        const float C2 = log2(6.0);
+        float mipLevelByRoughness = -logNsamples - logPdf - C1 + C2 + 2 * logResolution;
+        float mipLevel = uRoughness == 0.0 ? 0.0 : 0.5 * mipLevelByRoughness;
+
+        vec3 envColor = textureLod(uEnvironment, L, mipLevel).rgb;
 
         float NdotL = max(dot(N, L), 0.0);
         prefilteredColor += envColor * NdotL;
@@ -79,4 +97,11 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
 
     vec3 sampleVec = tangent * H.x + bitangent * H.y + N * H.z;
     return normalize(sampleVec);
+}
+
+float NDF_TrowbridgeReitzGGX(float NdotH, float roughness)
+{
+    float aSqr = pow(roughness, 4.0);
+    float denom = NdotH * NdotH * (aSqr - 1.0) + 1.0;
+    return aSqr / (PI * denom * denom);
 }

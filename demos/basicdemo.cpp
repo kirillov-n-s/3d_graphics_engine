@@ -249,7 +249,7 @@ namespace Demos {
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_HDRPanorama0035_colorful_alley_8K_hdri_sphere.hdr";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_NorwayForest_8K_hdri_sphere.hdr";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_JapanParkingGarageB_8K_hdri_sphere.hdr";
-        const std::string equirectangularMapPath = commonEnvPath + "pretville_cinema_16k.hdr";
+        const std::string equirectangularMapPath = commonEnvPath + "courtyard_night_16k.hdr";
         const Core2d::Image equirectangularMapImage(equirectangularMapPath);
         const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces =
             Rendering::Textures::equirectangularMapToCubemapFaces(equirectangularMapImage, 4096);

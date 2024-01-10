@@ -80,7 +80,7 @@ namespace Core2d {
             case ImageFormat::RGBA:
                 return GL_RGBA;
             case ImageFormat::HDR:
-                return GL_RGB16F;
+                return GL_RGB32F;
             default:
                 std::cerr << "Incorrect image format" << std::endl;
             exit(228);

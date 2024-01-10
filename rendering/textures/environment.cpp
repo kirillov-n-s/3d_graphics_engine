@@ -131,7 +131,7 @@ namespace Rendering::Textures {
         const int glFormat = Core2d::formatToGlFormat(mapFormat);
         const int glDtype = static_cast<int>(mapDtype);
 
-        const GlCubemap envCubemap(cubeFaces);
+        const GlCubemap envCubemap(cubeFaces, true);
 
         RenderToCubemap renderToCubemap(
             prefilteredCubeDim,
@@ -184,7 +184,7 @@ namespace Rendering::Textures {
     {
         RenderToTexture renderToTexture(
             lutTextureDim, lutTextureDim,
-            GL_RG16F, GL_RG, GL_FLOAT);
+            GL_RG32F, GL_RG, GL_FLOAT);
 
         std::string error;
 
