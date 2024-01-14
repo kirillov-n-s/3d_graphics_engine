@@ -11,7 +11,9 @@ namespace Rendering::Meshes {
         explicit GlMesh(const MeshBuffer &buffer);
         ~GlMesh();
 
-        void draw() const;
+        void draw(
+            const bool useTesselation = false,
+            const bool drawWireframe = false) const;
 
         void swapVertexBuffer(const MeshBuffer &buffer) const;
 

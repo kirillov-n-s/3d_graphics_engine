@@ -1,8 +1,10 @@
 #version 460 core
 
-in vec3 vPosition;
-in vec2 vTexcoord;
-in mat3 vTBN;
+in vec3 tePosition;
+in vec2 teTexcoord;
+in vec3 teNormal;
+in float teHeight;
+in mat3 teTBN;
 
 out vec4 FragColor;
 
@@ -39,32 +41,32 @@ void main()
     vec3 lightPos = vec3(15.0, 15.0, 15.0);
     vec3 lightColor = vec3(1.0) * 20;
 
-    vec3 albedo = texture(uAlbedo, vTexcoord).rgb;
+    vec3 albedo = texture(uAlbedo, teTexcoord).rgb;
 
-    vec3 normal = texture(uNormalMap, vTexcoord).rgb;
+    vec3 normal = texture(uNormalMap, teTexcoord).rgb;
     normal = normal * 2.0 - 1.0;
-    normal = normalize(vTBN * normal);
+    normal = normalize(teTBN * normal);
 
-    float roughness = texture(uRoughness, vTexcoord).r;
+    float roughness = texture(uRoughness, teTexcoord).r;
 //    float roughness = 0.0;
 
-    float metallic = texture(uMetallic, vTexcoord).r;
-//    float metallic = 0.0;
+//    float metallic = texture(uMetallic, teTexcoord).r;
+    float metallic = 0.0;
     vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
-    float ao = texture(uAO, vTexcoord).r;
+    float ao = texture(uAO, teTexcoord).r;
 //    float ao = 1.0;
 
-    vec3 viewDir = normalize(uCameraPos - vPosition);
+    vec3 viewDir = normalize(uCameraPos - tePosition);
 
     // direct lighting
     vec3 Lo = vec3(0.0);
     for (int i = 0; i < 0; ++i)  // loop over light sources
     {
         // Li - light radiance
-        vec3 lightDir = normalize(lightPos - vPosition);
-        float lightDistance = length(lightPos - vPosition);
+        vec3 lightDir = normalize(lightPos - tePosition);
+        float lightDistance = length(lightPos - tePosition);
         float lightAttenuation = 1.0 / (1.0 + 0.2 * lightDistance);
         vec3 radiance = lightColor * lightAttenuation;
 
@@ -83,22 +85,24 @@ void main()
     vec3 kS = F;
     vec3 kD = (1.0 - kS) * (1.0 - metallic);
 
-    vec3 irradiance = texture(uIrradiance, normal).rgb;
-    vec3 diffuse = irradiance * albedo;
-
     const float uMaxReflectionLod = 7.0; // bug: needs to be a uniform
     float roughnessLod = roughness * uMaxReflectionLod;
     vec3 prefilteredColor = textureLod(uPrefilteredEnv, reflected, roughnessLod).rgb;
     vec2 envBRDF = texture(uBrdfLUT, vec2(NdotV, roughness)).rg;
     vec3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
 
+//    vec3 irradiance = texture(uIrradiance, teNormal).rgb;
+    vec3 irradiance = textureLod(uPrefilteredEnv, normal, uMaxReflectionLod).rgb;
+    vec3 diffuse = irradiance * albedo;
+
     vec3 ambient = (kD * diffuse + specular) * ao;
 
     vec3 color = ambient + Lo;
+//    color = (teNormal + 1.0) * 0.5;
 
     // tone mapping + gamma correction
-//    color = color / (color + vec3(1.0));
-    color = vec3(1.0) - exp(-color);
+    float exposure = 1.0;
+    color = vec3(1.0) - exp(-color * exposure);
     color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);

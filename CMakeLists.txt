@@ -36,6 +36,7 @@ add_executable (
         "rendering/textures/gltexture.h" "rendering/textures/gltexture.cpp"
         "rendering/textures/glcubemap.h" "rendering/textures/glcubemap.cpp"
         "rendering/textures/environment.h" "rendering/textures/environment.cpp"
+        "rendering/textures/material.h" "rendering/textures/material.cpp"
         "rendering/textures/rendertocubemap.h" "rendering/textures/rendertocubemap.cpp"
         "rendering/textures/rendertotexture.h" "rendering/textures/rendertotexture.cpp"
 

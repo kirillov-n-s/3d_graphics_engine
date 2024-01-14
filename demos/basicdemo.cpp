@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "../rendering/textures/material.h"
 #include "..\rendering\textures\environment.h"
 
 namespace Demos {
@@ -41,6 +42,7 @@ namespace Demos {
         m_glShaderProgram->setUniform("uNormalModel", m_normalModelMat);
         m_glShaderProgram->setUniform("uAlbedo", 0);
         m_glShaderProgram->setUniform("uNormalMap", 1);
+
         if (m_roughness != nullptr)
             m_glShaderProgram->setUniform("uRoughness", 2);
         if (m_metallic != nullptr)
@@ -51,10 +53,15 @@ namespace Demos {
         m_glShaderProgram->setUniform("uPrefilteredEnv", 6);
         m_glShaderProgram->setUniform("uBrdfLUT", 7);
 
+        m_glShaderProgram->setUniform("uHeightMap", 8);
+        m_glShaderProgram->setUniform("uHeightScale", 2.0f);
+        m_glShaderProgram->setUniform("uHeightBias", 0.0f);
+
         m_envCubemapShaderProgram->use();
         m_envCubemapShaderProgram->setUniform("uProjection", projectionMat);
         m_envCubemapShaderProgram->setUniform("uEnvironment", 0);
 
+        glEnable(GL_MULTISAMPLE);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);
@@ -103,6 +110,8 @@ namespace Demos {
             glVersionMajor, glVersionMinor,
             cursorMode);
 
+        glfwWindowHint(GLFW_SAMPLES, 4);
+
         glfwSetFramebufferSizeCallback(m_window, resizeCallback);
         glfwSetCursorPosCallback(m_window, cursorCallback);
         glfwSetScrollCallback(m_window, scrollCallback);
@@ -114,8 +123,10 @@ namespace Demos {
 
     void BasicDemo::initShaders()
     {
-        const std::string vertPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main_with_tbn.vert)";
-        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\pbr_with_tbn_with_full_ibl.frag)";
+        const std::string vertPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main_with_tess.vert)";
+        const std::string fragPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\pbr_with_ibl_with_tess.frag)";
+        const std::string tessControlPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main.tesc)";
+        const std::string tessEvalPath = R"(C:\Users\kirillov_n_s\Desktop\Projects\engine\data\shaders\main.tese)";
 
         std::string error = "";
 
@@ -131,10 +142,23 @@ namespace Demos {
             error);
         Common::exitOnError(error, 2);
 
-        m_glShaderProgram = std::make_shared<Rendering::Shaders::GlShaderProgram>(
-            std::vector{vertShader, fragShader},
+        const Rendering::Shaders::GlShader tessControlShader(
+            tessControlPath,
+            Rendering::Shaders::GlShaderType::TessControlShader,
             error);
         Common::exitOnError(error, 3);
+
+        const Rendering::Shaders::GlShader tessEvalShader(
+            tessEvalPath,
+            Rendering::Shaders::GlShaderType::TessEvalShader,
+            error);
+        Common::exitOnError(error, 4);
+
+        m_glShaderProgram = std::make_shared<Rendering::Shaders::GlShaderProgram>(
+            // std::vector{vertShader, fragShader},
+            std::vector{vertShader, tessControlShader, tessEvalShader, fragShader},
+            error);
+        Common::exitOnError(error, 5);
     }
 
     void BasicDemo::initMeshes()
@@ -199,7 +223,7 @@ namespace Demos {
         // m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
 
 
-        const std::string commonPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Materials\TCom_Plastic_SpaceBlanketFolds_4K\)";
+        const std::string commonPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Materials\wood_floor_deck_8k\)";
 
         const std::string albedoPath = commonPath + "albedo.png";
         const Core2d::Image albedoImage(albedoPath);
@@ -213,13 +237,17 @@ namespace Demos {
         const Core2d::Image roughnessImage(roughnessPath, Core2d::ImageFormat::Grayscale);
         m_roughness = std::make_shared<Rendering::Textures::GlTexture>(roughnessImage, false);
 
-        const std::string metallicPath = commonPath + "metallic.png";
-        const Core2d::Image metallicImage(metallicPath, Core2d::ImageFormat::Grayscale);
-        m_metallic = std::make_shared<Rendering::Textures::GlTexture>(metallicImage, false);
+        // const std::string metallicPath = commonPath + "metallic.png";
+        // const Core2d::Image metallicImage(metallicPath, Core2d::ImageFormat::Grayscale);
+        // m_metallic = std::make_shared<Rendering::Textures::GlTexture>(metallicImage, false);
 
         const std::string aoPath = commonPath + "ao.png";
         const Core2d::Image aoImage(aoPath, Core2d::ImageFormat::Grayscale);
         m_ambientOcclusion = std::make_shared<Rendering::Textures::GlTexture>(aoImage, false);
+
+        const std::string heightPath = commonPath + "height.png";
+        const Core2d::Image heightImage(heightPath, Core2d::ImageFormat::Grayscale);
+        m_heightMap = std::make_shared<Rendering::Textures::GlTexture>(heightImage, false);
 
         // const std::string commonPath = R"(C:\Users\kirillov_n_s\Desktop\Assets\Meshes\Cerberus_by_Andrew_Maximov\)";
         // const std::string albedoPath = commonPath + "Cerberus_A.tga";
@@ -249,7 +277,7 @@ namespace Demos {
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_HDRPanorama0035_colorful_alley_8K_hdri_sphere.hdr";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_NorwayForest_8K_hdri_sphere.hdr";
         // const std::string equirectangularMapPath = commonEnvPath + "TCom_JapanParkingGarageB_8K_hdri_sphere.hdr";
-        const std::string equirectangularMapPath = commonEnvPath + "courtyard_night_16k.hdr";
+        const std::string equirectangularMapPath = commonEnvPath + "fireplace_16k.hdr";
         const Core2d::Image equirectangularMapImage(equirectangularMapPath);
         const std::array<std::shared_ptr<Core2d::Image>, 6> &cubeFaces =
             Rendering::Textures::equirectangularMapToCubemapFaces(equirectangularMapImage, 4096);
@@ -322,7 +350,8 @@ namespace Demos {
         m_irradianceCubemap->use(5);
         m_prefilteredCubemap->use(6);
         m_brdfLutTexture->use(7);
-        m_glMesh->draw();
+        m_heightMap->use(8);
+        m_glMesh->draw(true);
 
         m_envCubemapShaderProgram->use();
         m_envCubemapShaderProgram->setUniform("uView", m_camera.view());

@@ -10,6 +10,8 @@ namespace IO {
         std::string &error,
         const ImageWriterSettings &settings)
     {
+        stbi_flip_vertically_on_write(settings.flipVertically);
+
         error = "";
 
         const char *path_cstr = path.c_str();

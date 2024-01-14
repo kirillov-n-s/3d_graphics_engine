@@ -9,6 +9,7 @@ namespace IO {
     struct ImageWriterSettings
     {
         int jpgQuality = 100;
+        bool flipVertically = true;
     };
 
     void writeImage(

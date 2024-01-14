@@ -69,15 +69,21 @@ namespace Rendering::Meshes {
         glDeleteBuffers(1, &m_elementBufferObject);
     }
 
-    void GlMesh::draw() const
+    void GlMesh::draw(const bool useTesselation, const bool drawWireframe) const
     {
+        if (drawWireframe)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        if (useTesselation)
+            glPatchParameteri(GL_PATCH_VERTICES, 3);
         glBindVertexArray(m_vertexArrayObject);
         glDrawElements(
-                GL_TRIANGLES,
+                useTesselation ? GL_PATCHES : GL_TRIANGLES,
                 m_nElements,
                 GL_UNSIGNED_INT,
                 nullptr);
         glBindVertexArray(0);
+        if (drawWireframe)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
     void GlMesh::swapVertexBuffer(const MeshBuffer &buffer) const

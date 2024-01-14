@@ -29,6 +29,7 @@ void main()
             vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * normal;
 
             vec3 envColor = texture(uEnvironment, sampleVec).rgb;
+            envColor = vec3(1.0) - exp(-envColor * 2.0); // bug: hotfix, impl same mipmap trick as is prefilter
             irradiance += envColor * cos(theta) * sin(theta);
         }
     }

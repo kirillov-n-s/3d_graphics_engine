@@ -46,6 +46,7 @@ namespace Demos {
         std::shared_ptr<Rendering::Textures::GlTexture> m_roughness;
         std::shared_ptr<Rendering::Textures::GlTexture> m_metallic;
         std::shared_ptr<Rendering::Textures::GlTexture> m_ambientOcclusion;
+        std::shared_ptr<Rendering::Textures::GlTexture> m_heightMap;
 
         std::shared_ptr<Rendering::Textures::GlCubemap> m_envCubemap;
         std::shared_ptr<Rendering::Textures::GlCubemap> m_irradianceCubemap;
